@@ -168,13 +168,13 @@ PRO DWL_curtain
 
 ;DWL_file_merge, nfiles, files, data 
 
-file='C:\Users\Wes Cantrell\Dropbox\DWL\20130828\12-23\20130828_12-23.sav'
+file='C:\Users\Wes Cantrell\Dropbox\DWL\20130906\12-20\20130906_12-20.sav'
 restore,filename=file,/verbose
 
 time  = data[*,0,0]
   
 ;altitude = (range gate + 0.5) * gate length(meters)
-alt = (data[0,1:199,0] +0.5) * 30.
+alt = ((data[0,1:199,0] +0.5) * 30.)/1000.
 azimuth = data[*,0,1]
 elevation =data[*,0,2]
 
@@ -197,7 +197,7 @@ intensity_range=[MIN(intensity), MAX(intensity)]
 beta_range=[MIN(beta), MAX(beta)]
 
 
-ofile0='C:\Users\Wes Cantrell\Dropbox\DWL\20130828\12-23\20130828_12-23_stare_utc_rainbow.ps'
+ofile0='C:\Users\Wes Cantrell\Dropbox\DWL\20130906\12-20\20130906_12-20_stare_utc_rainbow.ps'
 
 set_plot,'ps'
 !p.thick=3.0 & !x.thick=1.5 & !y.thick=1.5 & !p.charsize=1.5  
@@ -222,17 +222,17 @@ plot, time_range, alt_range $
     ;, ystyle=2 $
     , /NODATA  $
     , XTICKINTERVAL=1  $
-    , YTICKINTERVAL=500  $
+    , YTICKINTERVAL=.5  $
     ;, yminor=1 $
     ;, xminor=1  
-    , yrange=[0,2500],color=1 
+    , yrange=[0,2.5],color=1 
     ;, clip=[time_range[0],-50,time_range[1], 100] $
         
    
 FOR i=1, N_ELEMENTS(time)-1 DO BEGIN
   FOR z=1, N_ELEMENTS(alt[0,*])-1 DO BEGIN
    
-	if alt[z] le 2500. then begin
+	if alt[z] le 2.5 then begin
      IF intensity[i,z] GE 1.015 THEN BEGIN
 	       polyfill, [time[i-1], time[i], time[i], time[i-1]]  $
                  , [alt[z-1], alt[z-1], alt[z], alt[z]]  $
@@ -252,23 +252,23 @@ ENDFOR
 
 plot, time_range, alt_range $
     , xtitle='UTC' $
-    , ytitle='Altitude (m)'  $
+    , ytitle='Altitude (km)'  $
     , title='DWL Backscatter' $
     , xstyle=3 $
     ;, ystyle=2 $
     , /NODATA  $
     , XTICKINTERVAL=1  $
-    , YTICKINTERVAL=500  $
+    , YTICKINTERVAL=.5  $
     ;, yminor=1 $
     ;, xminor=1  
-    , yrange=[0,2500],color=1 
+    , yrange=[0,2.5],color=1 
     ;, clip=[time_range[0],-50,time_range[1], 100] $
         
    
 FOR i=1, N_ELEMENTS(time)-1 DO BEGIN
   FOR z=1, N_ELEMENTS(alt[0,*])-1 DO BEGIN
    
-   if alt[z] le 2500. then begin
+   if alt[z] le 2.5 then begin
     
     IF intensity[i,z] GE SNR_threshold THEN BEGIN
       polyfill, [time[i-1], time[i], time[i], time[i-1]]  $
